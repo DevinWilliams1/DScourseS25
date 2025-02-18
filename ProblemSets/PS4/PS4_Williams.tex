@@ -1,0 +1,57 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{geometry}
+
+\geometry{
+top=0.5in,
+bottom=1in,
+left=1in,
+right=1in
+}
+
+\title{\textbf{Problem Set Four}}
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{itemize}
+     \item Issues with running script in R, Java continually is defaulting to a older version. Seems to be running now, and will run outside of OSCER. Tried to implement change mentioned in email but have not been able to fix it fully. 
+    \item Data Sources
+        \begin{itemize}
+            \item[$\diamond$] I am very interested in looking at data scraping for multiple different sources. Including...
+                \begin{itemize}
+                    \item[$\diamond$] Professional soccer player values in leagues around the world. 
+                \end{itemize}
+                \begin{itemize}
+                    \item[$\diamond$] Transit data including things like rider patterns or bus schedules.
+                \end{itemize}
+                 \begin{itemize}
+                    \item[$\diamond$] NFL performance statistics year over year. 
+                \end{itemize}
+                \begin{itemize}
+                    \item[$\diamond$] Professional athletes interview scripts. 
+                \end{itemize}
+                \begin{itemize}
+                    \item[$\diamond$] Boeing flight data, looking at how true issues with their planes are. 
+                \end{itemize}
+        \end{itemize}
+    \item Question One: Check what type of object mydf is. What type of an object is mydf\$date?
+       \begin{itemize}
+            \item[$\diamond$] It is a character. 
+        \end{itemize}
+    \item Question Two: Verify that the two dataframe are different types: type class(df1) and class(df). What is the class of each?
+        \begin{itemize}
+            \item[$\diamond$] There are two different classes: df1 is tbl\_df and df2 is tbl\_spark
+        \end{itemize}
+    \item Question Three: Are the column names any different across the two objects? If so, why might that be?
+        \begin{itemize}
+             \item[$\diamond$] For the dataframe labeled "df" has the column names: Sepal\_Length, Sepal\_Width, Petal\_Length, Petal\_Width, Species. While the dataframe labeled "df1" has the column names: Sepal.Length, Sepal.Width, Petal.Length, Petal.Width, Species
+        \end{itemize}
+        \begin{itemize}
+             \item[$\diamond$] Spark typically uses an underscore as a separator rather than a dot like R. This is why df1 has dots and df has underscores in this example. 
+        \end{itemize}
+        \end{itemize}
+\end{document}
