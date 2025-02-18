@@ -1,12 +1,11 @@
+#Changes made based on "Zero exit status" when trying to install jsonlite as done within the problem set. 
+
 # Set CRAN mirror (This seems to be causing issues)
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 
-#Removing lock file from within R to allow jsonlite to download
-unlink("/home/ouecon010/R/x86_64-pc-linux-gnu-library/4.0/00LOCK-jsonlite", recursive = TRUE)
-
-# Install Packages
-install.packages('tidyverse')
-install.packages('jsonlite')
+# Check and install packages if needed
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("jsonlite")) install.packages("jsonlite")
 
 #libraries needed
 library(tidyverse)
@@ -22,7 +21,9 @@ mylist <- fromJSON('dates.json')
 mydf <- bind_rows(mylist$result[-1])
 
 #Check class of dataframe that was created
-class(mydf)
+print("Dataframe class:")
+print(class(mydf))  
 
 #List the first 6 rows of the dataframe
-head(mydf)
+print("First 6 rows:")
+print(head(mydf))   

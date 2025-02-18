@@ -1,6 +1,9 @@
+# Set CRAN mirror (This seems to be causing issues)
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+
 #Packages to install
-install.packages(sparklyr)
-install.packages(tidyverse)
+install.packages('sparklyr')
+install.packages('tidyverse')
 
 #Load packages
 library(sparklyr)
