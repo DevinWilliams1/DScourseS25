@@ -29,7 +29,7 @@ top50_df <- top50_df %>%
     Old_Club = "From"
   )
 
-#Convert the Fee in Euros tabe to numeric and clean it to remove commas and euro symbols
+#Convert the Fee in Euros column to numeric and clean it to remove commas and euro symbols
 top50_df$Fee_Euros <- as.numeric(gsub("[€,]", "", top50_df$Fee_Euros))
 
 #Create a new row showing the league that each buying club is in
