@@ -1,0 +1,108 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tabularray}
+\usepackage{siunitx}     
+\usepackage{booktabs}
+\usepackage{array}
+\geometry{
+  top=0.0in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\title{\textbf{Problem Set Seven}}
+
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Data Summary Table}
+Table \ref{tab:summary} shows the summary statistics for the dataset.
+\begin{table}[h!] %h! used to make the table appear in this section rather than float to the bottom of the page. 
+\centering
+\caption{Summary Statistics}
+\label{tab:summary}
+\begin{tabular}[t]{llllllll}
+\toprule
+  & Unique & Missing Pct. & Mean & SD & Min & Median & Max\\
+\midrule
+logwage & 670 & 25 & \num{1.6} & \num{0.4} & \num{0.0} & \num{1.7} & \num{2.3}\\
+hgc & 16 & 0 & \num{13.1} & \num{2.5} & \num{0.0} & \num{12.0} & \num{18.0}\\
+tenure & 259 & 0 & \num{6.0} & \num{5.5} & \num{0.0} & \num{3.8} & \num{25.9}\\
+age & 13 & 0 & \num{39.2} & \num{3.1} & \num{34.0} & \num{39.0} & \num{46.0}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Missing Data Analysis}
+The rate of missing log wages is 25\% seen from Table 1. 
+\section{Is the logwage variable MCAR/MAR/MNAR?}
+It is very unlikely that the logwage variable is missing completely at random due to the high amount of missing data. 25\% missing data demonstrates little chance of a purely random finding. It is possible that this data is MNAR, where people that are very low or very high on overall pay are less likely to report their wage. 
+
+
+\clearpage % Force a page break here
+\vspace*{1in} % Add 1 inch of vertical space at the top of the page
+\section{Imputation methods and regression table}
+\begin{table}[ht]
+\centering
+\caption{Comparison of Returns to Schooling ($\beta_1$) Across Methods.}
+\centering
+\begin{tabular}[t]{lrrr}
+\toprule
+Method & Estimate & Std. Error & Bias from True Value\\
+\midrule
+Complete Cases & 0.0632 & 0.0054 & -0.0298\\
+Mean Imputation & 0.0507 & 0.0043 & -0.0423\\
+Regression Imputation & 0.0632 & 0.0042 & -0.0298\\
+Multiple Imputation & 0.0640 & 0.0049 & -0.0290\\
+True Value & 0.0930 & NA & 0.0000\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Questions about table}
+\begin{itemize}
+    \item[$\diamond$] What patterns do you see?
+        \begin{itemize}
+            \item[$\diamond$] All methods seem to underestimate the true value of 0.093. This is based on the bias from true value column. 
+         \end{itemize}
+         \begin{itemize}
+            \item[$\diamond$] Mean imputation performs the worst of these.
+         \end{itemize}
+         \begin{itemize}
+            \item[$\diamond$] Multiple imputation performs the best. 
+         \end{itemize}
+\end{itemize}
+\begin{itemize}
+    \item[$\diamond$] What can you conclude about the veracity of the various imputation methods?
+        \begin{itemize}
+            \item[$\diamond$] Mean imputation is the least reliable, it may be distorting some of the relationships between variables as the single value is not the best way of imputing this large amount of missing values. 
+         \end{itemize}
+         \begin{itemize}
+            \item[$\diamond$] Complete cases perform well, but could create other biases by removing the cases entirely. This could make the data less representative. 
+         \end{itemize}
+         \begin{itemize}
+            \item[$\diamond$] Regression imputation has a smallest std. error in complete cases, demonstrating some efficiency gains. But could still have the same bias. 
+         \end{itemize}
+         \begin{itemize}
+            \item[$\diamond$] Multiple imputation has the best performance, it is able to best preserve the underlying relationships in the data while accounting for uncertainty. 
+         \end{itemize}
+\end{itemize}
+\clearpage % Force a page break here
+\vspace*{1in} % Add 1 inch of vertical space at the top of the page
+\begin{itemize}
+    \item[$\diamond$] Discuss the Beta1 estimates for the last two methods.
+        \begin{itemize}
+       \item[$\diamond$] Regression imputation shows the ability for predicated values to still have some efficiency. But really doesn't improve bias as mentioned. Multiple imputation demonstrates advantage for incorportating uncertainty. It comes closest to recovering the true parameter value.  
+         \end{itemize}
+\end{itemize}
+
+\section{Progress of Project}
+I am using worldwide soccer player data from transfermarkt to get an idea about potential biases from player nationality, while looking at what currently contributes most to a players transfer evaluation. I am hoping to create a multiple regression to get a better look at how things like goals, nationality, and age can impact this transfer evaluation. 
+
+\end{document}
