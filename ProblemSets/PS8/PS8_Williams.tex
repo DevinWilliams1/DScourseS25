@@ -1,0 +1,58 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tabularray}
+\usepackage{siunitx}     
+\usepackage{booktabs}
+\usepackage{float}
+
+
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\title{\textbf{Problem Set Eight}}
+
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Comparison of Estimate and True Value: Q5}
+The OLS estimates seem to be close to the true values, the differences found range from -0.003 to 0.003 with most reporting a difference of about 0.001. The close difference confirms that the estimator is working as it is expected to. The large sample size and small error variance is meant to produce these kinds of numbers. 
+
+\section{Difference of Answers: Q7}
+The two algorithms produced nearly identical results, with the differences between the coefficients being very small. For practical purposes, they converged to the same optimal values showing that they were both able to identify the global minimum.  
+
+
+\clearpage
+
+\section{How similar estimates are to the ground truth: Q9}
+\begin{table}[ht]
+\centering
+\caption{Comparison of Estimation Methods}
+\begin{tabular}{l rrrrrrr }
+\toprule
+term & TrueValues & OLSlm & ClosedForm & GradientDescent & LBFGS & NelderMead & MLE \\
+\midrule
+X1  &  1.500 & 1.501 & 1.501 & 1.496 & 1.501 & 1.501 & 1.501 \\
+X2  &  -1.000 & -1.001 & -1.001 & -0.998 & -1.001 & -1.001 & -1.001 \\
+X3  &  -0.250 & -0.252 & -0.252 & -0.250 & -0.252 & -0.252 & -0.252 \\
+X4  &  0.750 & 0.749 & 0.749 & 0.747 & 0.749 & 0.749 & 0.749 \\
+X5  &  3.500 & 3.501 & 3.501 & 3.490 & 3.501 & 3.501 & 3.501 \\
+X6  &  -2.000 & -2.001 & -2.001 & -1.994 & -2.001 & -2.001 & -2.001 \\
+X7  &  0.500 & 0.499 & 0.499 & 0.497 & 0.499 & 0.499 & 0.499 \\
+X8  &  1.000 & 1.003 & 1.003 & 1.000 & 1.003 & 1.003 & 1.003 \\
+X9  &  1.250 & 1.247 & 1.247 & 1.243 & 1.247 & 1.247 & 1.247 \\
+X10  &  2.000 & 2.001 & 2.001 & 1.995 & 2.001 & 2.001 & 2.001 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The estimates of of Beta across all the methods are very close to the true value, with gradient descent seemingly doing the worst. The estimates using the lm() function for OLS seems to have done just as well as the other methods tested. The large sample size is likely the reason for this finding. These small differences prove that with sufficient data points these estimation methods are able to recover the true parameters pretty accurately. 
+\end{document}
