@@ -1,33 +1,257 @@
 library(nloptr)
 library(tidyverse)
+library(modelsummary)
+#####################################################
+# Comprehensive analysis of regression estimation methods
+#####################################################
 
-#Set random number generator
+# Set seed for reproducibility
 set.seed(100)
 
-#Set dimensions of the problem
+# Set dimensions
 N <- 100000
 K <- 10
 
-#Create matrix with random normal values
+cat("Step 1: Generate data\n")
+cat("---------------------\n")
+
+# Create the matrix with random normal values
 X <- matrix(rnorm(N * (K-1)), nrow = N, ncol = K-1)
 
-#A columns of 1 as the first column
+# Add a column of 1's as the first column
 X <- cbind(rep(1, N), X)
 
-#Define sigma
+# Define sigma
 sigma <- 0.5
-sigma_squared <- sigma^2 #will be 0.25
+sigma_squared <- sigma^2  # 0.25
 
-#Generate error term eps ~ N (0, sigma^2)
-eps <- rnorm(N, mean = 0 , sd = sigma)
+# Generate the error term eps ~ N(0, sigma^2)
+eps <- rnorm(N, mean = 0, sd = sigma)
 
-#Verify length
-length(eps)
+# Define the beta vector
+beta <- c(1.5, -1, -0.25, 0.75, 3.5, -2, 0.5, 1, 1.25, 2)
 
-#Look at first few rows
-head(eps)
+# Generate Y = X*beta + eps
+Y <- X %*% beta + eps
 
-#Check variance (want it to be close to 0.25)
-var(eps)
+cat("Matrix X dimensions:", dim(X), "\n")
+cat("Vector Y length:", length(Y), "\n")
+cat("True beta values:", beta, "\n")
+cat("True sigma:", sigma, "\n\n")
 
-#UP TO PART 4, 3RD LINE
+cat("Step 2: Compute OLS using closed-form solution\n")
+cat("--------------------------------------------\n")
+
+# Compute beta_OLS using the closed-form solution: (X'X)^(-1) X'Y
+beta_OLS_closed <- solve(t(X) %*% X) %*% t(X) %*% Y
+
+# Display results
+cat("OLS estimates (closed-form):", beta_OLS_closed, "\n")
+cat("Difference from true beta:", beta - beta_OLS_closed, "\n\n")
+
+cat("Step 3: Compute OLS using gradient descent\n")
+cat("-----------------------------------------\n")
+
+# Initialize parameters
+learning_rate <- 0.0000003
+max_iterations <- 10000
+tolerance <- 1e-6
+
+# Initialize beta to zeros
+beta_GD <- rep(0, K)
+
+# Pre-compute X'X and X'Y to speed up gradient calculations
+XtX <- t(X) %*% X
+XtY <- t(X) %*% Y
+
+# Iterate
+for (i in 1:max_iterations) {
+  # Compute gradient: -2X'(Y - Xβ) = -2(X'Y - X'Xβ)
+  gradient <- -2 * (XtY - XtX %*% beta_GD)
+  
+  # Update beta
+  beta_GD_new <- beta_GD - learning_rate * gradient
+  
+  # Check convergence
+  if (sum((beta_GD_new - beta_GD)^2) < tolerance) {
+    cat("Converged after", i, "iterations\n")
+    break
+  }
+  
+  # Update beta for next iteration
+  beta_GD <- beta_GD_new
+  
+  # Print progress every 1000 iterations
+  if (i %% 1000 == 0) {
+    cat("Iteration", i, "- Current beta:", beta_GD[1:3], "...\n")
+  }
+}
+
+cat("OLS estimates (gradient descent):", beta_GD, "\n")
+cat("Difference from true beta:", beta - beta_GD, "\n")
+cat("Difference from closed-form OLS:", beta_OLS_closed - beta_GD, "\n\n")
+
+cat("Step 4: Compute OLS using L-BFGS and Nelder-Mead algorithms\n")
+cat("--------------------------------------------------------\n")
+
+# Load the nloptr package
+library(nloptr)
+
+# Define the OLS objective function: sum of squared residuals
+ols_objective <- function(beta_params, X, Y) {
+  residuals <- Y - X %*% beta_params
+  return(sum(residuals^2))
+}
+
+# Define the gradient of the objective function
+ols_gradient <- function(beta_params, X, Y) {
+  residuals <- Y - X %*% beta_params
+  return(-2 * t(X) %*% residuals)
+}
+
+# Initial guess for beta
+beta_init <- rep(0, K)
+
+# L-BFGS optimization
+opts_lbfgs <- list(
+  algorithm = "NLOPT_LD_LBFGS",
+  xtol_rel = 1.0e-8,
+  maxeval = 1000
+)
+
+result_lbfgs <- nloptr(
+  x0 = beta_init,
+  eval_f = ols_objective,
+  eval_grad_f = ols_gradient,
+  opts = opts_lbfgs,
+  X = X, 
+  Y = Y
+)
+
+beta_lbfgs <- result_lbfgs$solution
+
+# Nelder-Mead optimization
+opts_nm <- list(
+  algorithm = "NLOPT_LN_NELDERMEAD",
+  xtol_rel = 1.0e-8,
+  maxeval = 10000
+)
+
+result_nm <- nloptr(
+  x0 = beta_init,
+  eval_f = ols_objective,
+  opts = opts_nm,
+  X = X, 
+  Y = Y
+)
+
+beta_nm <- result_nm$solution
+
+cat("OLS estimates (L-BFGS):", beta_lbfgs, "\n")
+cat("OLS estimates (Nelder-Mead):", beta_nm, "\n")
+cat("Difference L-BFGS vs true beta:", beta - beta_lbfgs, "\n")
+cat("Difference Nelder-Mead vs true beta:", beta - beta_nm, "\n")
+cat("Difference L-BFGS vs closed-form OLS:", beta_OLS_closed - beta_lbfgs, "\n")
+cat("Difference Nelder-Mead vs closed-form OLS:", beta_OLS_closed - beta_nm, "\n")
+cat("Difference L-BFGS vs Nelder-Mead:", beta_lbfgs - beta_nm, "\n\n")
+
+cat("Step 5: Compute MLE using L-BFGS algorithm\n")
+cat("----------------------------------------\n")
+
+# Define the negative log-likelihood function for normal linear regression
+neg_log_likelihood <- function(theta, Y, X) {
+  beta <- theta[1:(length(theta)-1)]
+  sig <- theta[length(theta)]
+  
+  n <- length(Y)
+  residuals <- Y - X %*% beta
+  
+  # Negative log-likelihood
+  ll <- -(-n/2 * log(2 * pi) - n/2 * log(sig^2) - 
+            sum(residuals^2)/(2 * sig^2))
+  
+  return(ll)
+}
+
+# Define the gradient function as provided
+gradient <- function(theta, Y, X) {
+  grad <- as.vector(rep(0, length(theta)))
+  beta <- theta[1:(length(theta)-1)]
+  sig <- theta[length(theta)]
+  grad[1:(length(theta)-1)] <- -t(X) %*% (Y - X %*% beta) / (sig^2)
+  grad[length(theta)] <- dim(X)[1] / sig - crossprod(Y - X %*% beta) / (sig^3)
+  return(grad)
+}
+
+# Initial guess for theta (beta and sigma)
+theta_init <- c(rep(0, K), 1)  # Initial guess for beta values and sigma
+
+# L-BFGS optimization
+opts_lbfgs <- list(
+  algorithm = "NLOPT_LD_LBFGS",
+  xtol_rel = 1.0e-8,
+  maxeval = 1000
+)
+
+result_mle <- nloptr(
+  x0 = theta_init,
+  eval_f = neg_log_likelihood,
+  eval_grad_f = gradient,
+  opts = opts_lbfgs,
+  Y = Y, 
+  X = X
+)
+
+# Extract results
+beta_mle <- result_mle$solution[1:K]
+sigma_mle <- result_mle$solution[K+1]
+
+cat("MLE beta estimates:", beta_mle, "\n")
+cat("MLE sigma estimate:", sigma_mle, "\n")
+cat("Difference MLE beta vs true beta:", beta - beta_mle, "\n")
+cat("Difference MLE sigma vs true sigma:", sigma - sigma_mle, "\n")
+cat("Difference MLE beta vs closed-form OLS:", beta_OLS_closed - beta_mle, "\n\n")
+
+cat("Step 6: Compute OLS using lm() function\n")
+cat("-------------------------------------\n")
+
+# Use lm() to compute OLS estimates
+# Note: we use -1 to remove the intercept since we already have a column of 1's in X
+model_lm <- lm(Y ~ X - 1)
+
+# Display results
+cat("OLS estimates (lm):", coef(model_lm), "\n")
+cat("Difference from true beta:", beta - coef(model_lm), "\n")
+cat("Difference from closed-form OLS:", beta_OLS_closed - coef(model_lm), "\n\n")
+
+cat("Step 7: Export regression output using modelsummary\n")
+cat("------------------------------------------------\n")
+
+# Make sure modelsummary is installed and loaded
+imodels_list <- list("OLS (lm)" = model_lm)
+
+# Create a standard LaTeX table with modelsummary - simplified version
+modelsummary(models_list, 
+             output = "regression_results.tex",
+             stars = TRUE,
+             gof_map = c("nobs", "r.squared", "adj.r.squared"),
+             title = "OLS Regression Results")
+
+cat("LaTeX output saved to 'regression_results.tex'\n\n")
+
+cat("Step 8: Summary of all estimation methods\n")
+cat("---------------------------------------\n")
+
+# Create a summary table
+summary_data <- data.frame(
+  Parameter = c(paste0("beta_", 1:K), "sigma"),
+  True_Value = c(beta, sigma),
+  OLS_Closed_Form = c(as.numeric(beta_OLS_closed), NA),
+  OLS_Gradient_Descent = c(beta_GD, NA),
+  OLS_LBFGS = c(beta_lbfgs, NA),
+  OLS_Nelder_Mead = c(beta_nm, NA),
+  OLS_lm = c(as.numeric(coef(model_lm)), NA),
+  MLE = c(beta_mle, sigma_mle)
+)
+
+print(summary_data)
