@@ -1,0 +1,76 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tabularray}
+\usepackage{siunitx}     
+\usepackage{booktabs}
+\usepackage{float}
+
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\title{\textbf{Problem Set Nine}}
+
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Dimension of Training Data and amount of X Variables: Q7}
+\begin{itemize}
+  \item What is the dimension of your training data (housing\_train)? 
+    \begin{itemize}
+        \item The dimensions of the training data were 404 to 14.
+    \end{itemize}
+  \item How many more X variables do you have than in the original housing data?
+    \begin{itemize}
+        \item  There are 61 more x variables than the original housing data.
+    \end{itemize}
+\end{itemize}
+
+\section{Lasso: Q8}
+\begin{itemize}
+  \item What is the optimal value of Lambda? 
+    \begin{itemize}
+        \item The optimal Lambda value is 0.00139 based on the code. 
+    \end{itemize}
+    \item What is the in-sample RMSE? 
+    \begin{itemize}
+        \item The in-sample RMSE was estimated from the cross-validation results, which is 0.0632 as shown in the "mean" column. This is the average RMSE across the 6-fold cross-validation on the training data.
+    \end{itemize}
+     \item What is the out-of-sample RMSE (i.e. the RMSE in the test data)? 
+    \begin{itemize}
+        \item It shows an RMSE of 0.170 for "Preprocessor1\_Model1". This is the RMSE on your test data (out-of-sample).
+    \end{itemize}
+\end{itemize}
+
+\section{Ridge: Q9}
+\begin{itemize}
+  \item What is the optimal value of Lambda now?
+    \begin{itemize}
+        \item  The ridge regression model is 0.0233, as shown in the "penalty" column of the ridge\_top\_rmse output. 
+    \end{itemize}
+    \item What is the out-of-sample RMSE? 
+    \begin{itemize}
+        \item The out-of-sample RMSE for the ridge regression model is 0.173, as shown in the first table.
+    \end{itemize}
+\end{itemize}
+
+\section{Question 10}
+\begin{itemize}
+  \item Would you be able to estimate a simple linear regression model on a data set that had more columns than rows?
+    \begin{itemize}
+        \item You cannot estimate a simple linear regression model on a dataset that has more predictors (columns) than observations (rows). This creates a under determined system where there are infinite solutions that perfectly fit the training data. 
+    \end{itemize}
+    \item Where the model stands in terms of the bias-variance trade-off.
+    \begin{itemize}
+        \item Both models show significant gaps between in-sample and out-of-sample performance. This indicates some overfitting. Overall, the LASSO model performs better in both in- and out-of-sample fits. The optimal regularization parameters (Lambda = 0.00139 for LASSO and Lambda = 0.0233 for Ridge) show that Ridge requires stronger regularization than LASSO to achieve its best performance.
+    \end{itemize}
+\end{itemize}
+\end{document}
