@@ -1,0 +1,80 @@
+\documentclass[12pt,letterpaper]{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{tabularray}
+\usepackage{siunitx}     
+\usepackage{booktabs}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{tabularx}
+
+\geometry{
+  top=1in,
+  bottom=1in,
+  left=1in,
+  right=1in
+}
+
+\title{\textbf{Problem Set Ten}}
+
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Question 9}
+ \begin{table}[htbp]
+    \centering
+    \caption{Optimal Tuning Parameters and Out-of-Sample Performance}
+    \begin{tabular}{lcp{8cm}}
+    \hline
+    Algorithm & Accuracy & Parameters \\
+    \hline
+    Decision Tree & 86.8\% & cost\_complexity = 0, tree\_depth = 20, min\_n = 10 \\
+    SVM & 86.4\% & cost = 1, rbf\_sigma = 0.25 \\
+    Logistic Regression & 85.3\% & penalty = 0 \\
+    KNN & 84.3\% & neighbors = 30 \\
+    Neural Network & 82.9\% & penalty = 1, hidden\_units = 5 \\
+    \hline
+    \end{tabular}
+\end{table}
+    \begin{itemize}
+        \item How does each algorithm’s out-of-sample performance compare with each of the other algorithms?
+         \begin{itemize}
+            \item Decision Tree
+            \begin{itemize}
+                \item[$\diamond$] The Decision Tree at 86.8 percent achieved the highest accuracy. This suggests that the relationship between the predictors and high-income status involves non-linear interactions. The parameters listed show that a deep tree with minimal pruning was the most effective. 
+            \end{itemize}
+          \end{itemize}
+          \begin{itemize}
+            \item SVM
+            \begin{itemize}
+                \item[$\diamond$] SVM performed nearly as well as the decision tree, with less than 1 point of difference. This shows that the data has a clear separation that can be modeled using kernal methods. 
+            \end{itemize}
+          \end{itemize}
+          \begin{itemize}
+            \item Logistic Regression
+            \begin{itemize}
+                \item[$\diamond$] Despite its overall simplicity, logistic regression also performed quite well. This suggest that linear decision boundaries are still reasonably effective for this task. This also shows that some of the relationships between predictors and the outcome may be almost linear in nature. 
+            \end{itemize}
+          \end{itemize}
+          \newpage
+          \begin{itemize}
+            \item KNN
+            \begin{itemize}
+                \item[$\diamond$] This algorithim with optimal 30 neighbors performed the second worst, although not by much. The relatively high value of K suggests that local noise in the data benefits from substantial smoothing. 
+            \end{itemize}
+          \end{itemize}
+          \begin{itemize}
+            \item Neural Network
+            \begin{itemize}
+                \item[$\diamond$] The neural network with 5 hidden units showed the lowest performance, though still had a good result overall. This might be due to the limited size of the network. 
+            \end{itemize}
+          \end{itemize}
+          \begin{itemize}
+            \item [$\diamond$] Overall, the performance of all 5 are very small (with a 4 percentage point difference from best to worst). This shows that all 5 provide reasonable predictive power for this task. For this problem, the decision tree shows the best performance, suggesting that explicit interpretable decision rules may be particularly suited to income prediction based on demographic and employment characteristics. 
+            \end{itemize}
+    \end{itemize}
+\end{document}
