@@ -1,0 +1,212 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{longtable}
+
+
+\title{\textbf{The Economics of Soccer: Analyzing Player Market Value in the Global Game - Draft}}
+\author{Devin Williams}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+Many people think about the importance of sport through the impact it has on society. Athletes, teams, and organizations feel the importance of the connection that their fans have with them. Putting forth a quality team is instrumental to keeping their emotional connection strong, while growing sport brands around the world. No sport has touched the lives of more people around the world than soccer, the World Cup Final in 2022 had 1.5 billion viewers which is 1 billion more than the Super Bowl of the same year \citep{FIFA_Views}, demonstrating its worldwide appeal and importance. 
+
+Soccer's global reach is evidenced by the presence of professional leagues in almost every country around the world. It stands as the most popular sport in many countries across Europe, Africa, and South America. The financial investment in these professional teams and players has reached astronomical proportions. Within 2024 alone, teams from all corners of the world spent 10.96 billion euros on incoming players. This spending figure represents a decrease of 2 billion euros from the previous year, yet teams continue to allocate substantial financial resources to remain competitive. Of the total global expenditure, 62.5\% comes from just five leagues around the world \citep{Global_economic}:
+
+\begin{itemize}
+    \item The Premier League (United Kingdom)
+    \item Ligue 1 (France)
+    \item The Bundesliga (Germany)
+    \item Serie A (Italy)
+    \item La Liga (Spain)
+\end{itemize}
+
+These leagues, collectively known as the ``Big 5 Leagues'', invest enormous sums to acquire premier talent. The best players in the world aspire to join prestigious clubs like Real Madrid, Bayern Munich, and Liverpool.
+
+Given the magnitude of financial commitment, player evaluation analysis is of paramount importance. Miscalculating resources on player talent can have detrimental effects on teams, essentially wasting money in full view of their supporters. Understanding the relationships between different factors and player market value provides crucial insight into what drives the substantial prices paid in the transfer market.
+
+This analysis aims to:
+
+\begin{enumerate}
+    \item Identify key relationships between player characteristics and market value
+    \item Examine potential biases related to:
+        \begin{itemize}
+            \item Player country of origin
+            \item League affiliation
+            \item Club membership
+        \end{itemize}
+    \item Provide insights that can help teams optimize their investment in player talent
+\end{enumerate}
+
+By exploring these relationships, I hope to contribute to a more informed approach to player valuation and transfer market activity in the global game of soccer.
+
+\section{Lit Review}
+\label{sec:Lit Review}
+
+\subsection{Transfermarkt}
+\label{subsec:Transfermarkt}
+
+Transfermarkt's purpose and success has been analyzed within the soccer community for years. Studies have evaluated and studies the overall impact of the site through its usage of its online community of soccer enthusiasts \citep{Herm2014}. \cite{Wisdom_Crowd} analyzed Transfermarkt and how it has continued to become a influential within the world of Soccer. The article discussed how the evaluations posted within the sites pages have started to become a starting place for evaluations for teams. The article discusses how Transfermarkt has moved from predicting the market to having influence within it. 
+
+\subsection{Soccer Market Value Bias}
+\label{subsec:Market Value Bias}
+
+There is multiple biases related to player market values as well as the purchases or players. There has been a observed trend within Transfermarkts user base of bias evaluations towards fans of certain teams. As the website calls Germany its home, there has been biases from some fans related to players on the countries two biggest teams Bayern Munich and Borussia Dortmund. Users have accused the website of changing values for players that "play for the right team" \citep{Detzen2023}. This represents the presence of club biases within market evaluations, something that this study looks to evaluate. 
+
+Additional research has been done to evaluate factors relating to nationality bias, with \cite{Bell2023} investigating overpricing of English players in world football. The researchers within this study found that English players commanded approximately 40\% higher valuations and 25\% higher wages compared to similar players from other countries. This study looked to show that this was impacted by multiple factors, including the commonality of English players in the Premier League (which is the richest league in the world), English players being strikers on these teams, and English players being rare within top European leagues outside of England. This study investigated a relationship that is crucial to this study, although doing it on a broader scale. Within this research, evaluation will be narrowed to within the big 5 leagues to try to limit potential impact of lower competition. This study will also look to evaluate the impact of additional factors including club and league bias on player evaluations. 
+
+\section{Data}
+\label{sec:Data}
+This study looked to use a comprehensive dataset of professional football players compiled from Transfermarkt, which is regarding as a leading source for player market evaluations. The dataset contained 2,334 different players all from within the “Big 5” leagues of professional soccer. Players each showed detailed information on demographics (age, nationality, and position), current market value in euros, club affiliation, and performance metrics including goal contributions and appearances over the last two full years.
+
+Here is the make up of the player base, with the Premier League and Serie A being the most prevalent in this dataset. 
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=1\textwidth]{player_per_league.jpeg}
+    \caption{Number of players per league in the dataset}
+    \label{fig:league_plot}
+\end{figure}
+
+Countries of origin were mapped to continents to allow for more direct comparisons to be made. Clubs were also separated into five different tiers using a composite score based on average squad value, maximum player value, squad size, and overall youth of the club. This approach attempts to create an objective data-driven classification. 
+
+\section{Methods}
+\label{sec:Methods}
+
+The analytical approach combined exploratory data analysis with position-specific regression modeling. Initial exploratory data analysis examined market value distribution across continents, positions, age groups, and performance metrics. This section used descriptive statistics as well as visualizations to get a better understanding of data collected. Separate logarithmic regression models were developed for each position grouping. 
+\begin{equation} 
+\begin{split} 
+\ln(MarketValue_i) = & \beta_0 + \beta_1 Continent_i + \beta_2 Age_i \\ 
+& + \beta_3 Appearances_i + \beta_4 GoalContributions_i \\ 
+& + \beta_5 League_i + \beta_6 ClubTier_i + \varepsilon_i 
+\end{split} 
+\end{equation}
+
+\noindent \textbf{Where:} 
+\begin{itemize}
+    \item $\text{MarketValue}_i$ = Player $i$'s market value in Euros 
+    \item $\text{Continent}_i$ = Continent of origin (Europe as reference category) 
+    \item $\text{Age}_i$ = Player's age in years 
+    \item $\text{Appearances}_i$ = Number of appearances over the last two seasons 
+    \item $\text{GoalContributions}_i$ = Total goals and assists over the last two seasons 
+    \item $\text{League}_i$ = League categorization (Premier League as reference) 
+    \item $\text{ClubTier}_i$ = Club prestige level (Tier 1: Elite Clubs as reference)
+    \item $\varepsilon_i$ = Error term 
+\end{itemize}
+This example is taken from the forward regression model. This was used to explore some of the factors that impacted forward market value. Logarithmic transformation of market values addressed the positive skew in the distribution and allowed for percentage-based interpretation of coefficients.
+
+
+\section{Findings}
+\label{sec:Findings}
+
+** This section will most likely be the most modified, because of that I have kept it relatively simple focusing on each positions regression results in point from from the current model, there is also a example of a regression result in table form for Forwards, this will be used for all sections.  ** All significant effects were found to be statistically significant below the 0.05 level. 
+
+\subsection{Forward Regression}
+\label{subsec:Forward}
+
+\begin{table}[ht]
+\centering
+\caption{Forward Regression Coefficients}
+\begin{tabular}{lrrrr}
+\hline
+\textbf{Variable} & \textbf{Estimate} & \textbf{Std. Error} & \textbf{t value} & \textbf{Pr(\textgreater{}|t|)} \\
+\hline
+(Intercept) & 16.3277 & 0.2644 & 61.752 & $< 2\text{e}{-16}$ \\
+ContinentAfrica & 0.1239 & 0.1018 & 1.217 & 0.2240 \\
+ContinentAsia & -0.0024 & 0.2282 & -0.011 & 0.9915 \\
+ContinentNorth America & -0.2457 & 0.2148 & -1.144 & 0.2533 \\
+ContinentOceania & -0.2678 & 0.8923 & -0.300 & 0.7642 \\
+ContinentSouth America & 0.4072 & 0.1291 & 3.154 & 0.0017 \\
+Age & -0.0543 & 0.0092 & -5.889 & $6.61\text{e}{-09}$ \\
+Appearances (2 yrs) & 0.0264 & 0.0029 & 9.044 & $< 2\text{e}{-16}$ \\
+Goal Contributions (2 yrs) & 0.0229 & 0.0038 & 6.096 & $2.00\text{e}{-09}$ \\
+LeagueBundesliga & -0.9970 & 0.1168 & -8.536 & $< 2\text{e}{-16}$ \\
+LeagueLa Liga & -0.8055 & 0.1154 & -6.981 & $8.08\text{e}{-12}$ \\
+LeagueLigue 1 & -0.8077 & 0.1283 & -6.297 & $6.02\text{e}{-10}$ \\
+LeagueSerie A & -0.8943 & 0.1170 & -7.647 & $8.69\text{e}{-14}$ \\
+Tier 2 & -0.2916 & 0.1212 & -2.407 & 0.0164 \\
+Tier 3 & -0.7049 & 0.1265 & -5.574 & $3.83\text{e}{-08}$ \\
+Tier 4 & -0.7922 & 0.1291 & -6.137 & $1.56\text{e}{-09}$ \\
+Tier 5 & -1.0905 & 0.1394 & -7.825 & $2.44\text{e}{-14}$ \\
+\hline
+\end{tabular}
+\end{table}
+
+\textbf{Model:} This model explained roughly 62\% of the variance in player market values (R-squared = 0.623).
+
+\textbf{Main Findings:}
+\begin{itemize}
+    \item Both Appearances ($\beta = 0.026$, $p < 0.001$) and Goal Contributions ($\beta = 0.023$, $p < 0.001$) were found to significantly increase market value.  
+    \item Each additional year of age decreased market value by 5.4\%.
+    \item South American forwards within the Power Five leagues commanded a significant premium compared to their European counterparts. 
+    \item All leagues show significantly lower values compared to the Premier League. 
+    \item Values progressively decreased from Tier 1 to Tier 5. Tier 5 players were valued 67\% less than Tier 1.
+\end{itemize}
+
+\subsection{Midfield Regression}
+\label{subsec:Midfield}
+
+\textbf{Model:} This model explained 50\% of the variance in player market values (R-squared = 0.505).
+
+\textbf{Main Findings:}
+\begin{itemize}
+    \item Appearances strongly impact values ($\beta = 0.031$, $p < 0.001$), but Goal Contributions are not statistically significant. 
+    \item Age is less of a factor, indicating that midfielders may retain value for longer on average. 
+    \item South American midfielders have an even higher premium than forwards, while Oceania midfielders face a significant discount. 
+    \item Serie A shows a large discount, while Ligue 1 has a smaller one compared to the Premier League. 
+    \item Tier of club is even more influential, with Tier 5 players valued 77\% less than Tier 1.
+\end{itemize}
+
+\subsection{Defense Regression}
+\label{subsec:Defense}
+
+\textbf{Model:} This model explained 55\% of the variance in player market values (R-squared = 0.549).
+
+\textbf{Main Findings:}
+\begin{itemize}
+    \item Appearances strongly impact values ($\beta = 0.028$, $p < 0.001$), but Goal Contributions are not statistically significant. 
+    \item Defenders face the steepest age penalty overall, suggesting that Big 5 clubs generally prefer younger talent. 
+    \item More continents show significant effects: South American and African defenders command premiums, while North American defenders also show a positive premium.
+    \item All leagues show large and highly significant discounts compared to the Premier League. 
+    \item All tiers are significant, with progressively large discounts from Tier 1 to Tier 5.
+\end{itemize}
+
+\subsection{Goalkeeper Regression}
+\label{subsec:Goalkeeper}
+
+\textbf{Model:} This model explained 57\% of the variance in player market values (R-squared = 0.571).
+
+\textbf{Main Findings:}
+\begin{itemize}
+    \item Appearances have the strongest impact among all positions ($\beta = 0.046$, $p < 0.001$). 
+    \item The effect of age is not statistically significant, suggesting that goalkeeper value is less dependent on age than for other positions.  
+    \item There is no observed statistically significant difference across regions, suggesting goalkeeper talent is valued more consistently worldwide. 
+    \item Serie A and Bundesliga show large discounts, while La Liga shows no significant difference from the Premier League.
+    \item All tier effects are significant, with similar magnitudes across Tiers 3–5 (around $\beta = -0.9$), suggesting a simpler tiering structure for goalkeepers.
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:Conclusion}
+With an extremely influential and money driven sport like Soccer, understanding the factors that drive player values continues to be crucial to resource allocation. 
+
+This analysis reveals systematic patterns that both confirm and challenge conventional wisdom about player evaluation within the global market. 
+The insights gathered from this study hold significant practical implications for stakeholders across the soccer ecosystem. 
+
+\bibliographystyle{apalike} 
+\bibliography{PS11_Williams}
+
+\end{document}
